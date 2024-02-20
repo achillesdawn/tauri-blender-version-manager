@@ -8,9 +8,10 @@ interface VersionInfo {
     versionId: string;
 }
 
-const props = defineProps({
-    path: String
-});
+const props = defineProps<{
+    path: string,
+    created: number;
+}>();
 
 const emit = defineEmits<{
     (e: "update"): void;
@@ -88,27 +89,52 @@ function branchColor() {
     }
 }
 
+function createdInHours() {
+    let result = props.created / 3600
+
+    if (result < 1) {
+        result = result*60
+        return result.toFixed(0) + " min"
+    } else if (result > 24) {
+        result = result / 24
+        return result.toFixed(0) + " days"
+    }
+
+    return result.toFixed(0) + " h"
+}
+
 </script>
 
 <template>
     <div class="grid-item">
 
         <div class="capsule"> {{ versionInfo.version }}</div>
-        <div class="capsule" :style="branchColor()"> {{ versionInfo.branch }}</div>
+        <div class="capsule"
+            :style="branchColor()"> {{ versionInfo.branch }}</div>
 
 
-        <div class="version-id"> {{ versionInfo.versionId }}</div>
+        <div class="version-id">
+            <div>
+                {{ versionInfo.versionId }}
+            </div>
+            <div class="time">
+                {{ createdInHours() }}
+            </div>
+        </div>
 
         <div class="buttons">
-            <button v-if="!isXz" @click="remove_dir(props.path)">
+            <button v-if="!isXz"
+                @click="remove_dir(props.path)">
                 Remove
             </button>
 
-            <button v-if="isXz" @click="extract(props.path)">
+            <button v-if="isXz"
+                @click="extract(props.path)">
                 Extract
             </button>
 
-            <button v-if="isXz" @click="remove_file(props.path)">
+            <button v-if="isXz"
+                @click="remove_file(props.path)">
                 Remove
             </button>
         </div>
@@ -118,6 +144,7 @@ function branchColor() {
 
 <style scoped>
 .grid-item {
+    box-sizing: border-box;
     position: relative;
     justify-self: start;
 
@@ -129,7 +156,8 @@ function branchColor() {
     border-radius: 12px;
 
     display: grid;
-    grid-template-columns: 1fr 1fr 3fr auto;
+    grid-template-columns: 10% 12% 1fr auto;
+    grid-template-rows: 100%;
     gap: 15px;
 
     align-items: center;
@@ -162,5 +190,9 @@ function branchColor() {
 
 .version-id {
     justify-self: start;
+}
+
+.time {
+    font-size: small;
 }
 </style>

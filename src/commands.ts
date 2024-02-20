@@ -8,7 +8,7 @@ export function download(url: string): Promise<void> {
     return invoke("download", { url });
 }
 
-export function list_dirs(): Promise<string[]> {
+export function list_dirs(): Promise<DirEntry[]> {
     return invoke("list_dirs", { path: "/home/miguel/blenders" });
 }
 

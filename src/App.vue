@@ -6,12 +6,12 @@ import * as commands from "./commands";
 import Download from "./components/Download.vue";
 import Blender from "./components/Blender.vue";
 
-const dirs = ref<string[] | undefined>(undefined);
+const dirs = ref<DirEntry[] | undefined>(undefined);
 
 
 function update_tag() {
     commands.list_dirs().then(result => {
-        dirs.value = result.filter(item => item.includes("blender"));
+        dirs.value = result.filter(item => item[0].includes("blender"));
     });
 }
 
@@ -20,11 +20,15 @@ update_tag();
 </script>
 
 <template>
-
     <div class="main">
-        <Download></Download>
+        <Download @update="update_tag"></Download>
         <template v-if="dirs">
-            <Blender v-for="(dir, idx) in dirs" :path="dir" @update="update_tag" :key="dir"></Blender>
+            <Blender v-for="(dir, idx) in dirs"
+                :path="dir[0]"
+                @update="update_tag"
+                :key="dir[0]"
+                :created="dir[1]">
+            </Blender>
 
         </template>
     </div>
@@ -32,15 +36,15 @@ update_tag();
 
 <style scoped>
 .main {
+    box-sizing: border-box;
+    position: relative;
     display: grid;
     grid-template-columns: auto;
     gap: 12px;
     align-items: center;
-    justify-items: center;
-    padding: 5% 10%;
+    justify-items: stretch;
+    padding: 5% 5%;
 }
-
-
 </style>
 
 

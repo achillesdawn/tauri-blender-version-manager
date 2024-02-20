@@ -3,8 +3,8 @@ use std::{fs, path::PathBuf, str::FromStr};
 const BASE_DIR: &'static str = "/home/miguel/blenders/";
 
 #[tauri::command]
-pub fn list_dirs(path: String) -> Result<Vec<String>, String> {
-    let mut results: Vec<PathBuf> = Vec::with_capacity(10);
+pub fn list_dirs(path: String) -> Result<Vec<(String, u64)>, String> {
+    let mut results: Vec<(PathBuf, u64)> = Vec::with_capacity(10);
 
     let pathbuf = PathBuf::from_str(&path).unwrap();
 
@@ -16,20 +16,28 @@ pub fn list_dirs(path: String) -> Result<Vec<String>, String> {
         let entry = entry.unwrap();
         let metadata = entry.metadata().unwrap();
 
+        let created = metadata.created().unwrap();
+        let created = created.elapsed().unwrap().as_secs();
+
         if metadata.is_dir() {
-            results.push(entry.path());
+            results.push((entry.path(), created));
         } else {
             let path = entry.path();
             let extension = path.extension().unwrap();
             if extension == "xz" {
-                results.push(path);
+                results.push((path, created));
             }
         }
     }
 
     Ok(results
         .iter()
-        .map(|entry| entry.file_name().unwrap().to_str().unwrap().to_owned())
+        .map(|(entry, created)| {
+            (
+                entry.file_name().unwrap().to_str().unwrap().to_owned(),
+                *created,
+            )
+        })
         .collect())
 }
 

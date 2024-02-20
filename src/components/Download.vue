@@ -15,13 +15,13 @@ const status = ref("");
 
 const total = computed(() => {
     if (downloadTotal.value > 0) {
-        return (downloadTotal.value / (1024 * 1024)).toFixed(1);
+        return (downloadTotal.value / (1000 * 1000)).toFixed(1);
     }
 });
 
 const progressTotal = computed(() => {
     if (progress.value > 0) {
-        return (progress.value / (1024 * 1024)).toFixed(1);
+        return (progress.value / (1000 * 1000)).toFixed(1);
     }
 });
 
@@ -38,7 +38,7 @@ const percentage = computed(() => {
 const downloadRate = computed(() => {
     const rate = progress.value - lastProgress.value;
     const ratePerSec = rate / 2.5;
-    return (ratePerSec / 1024).toLocaleString(undefined, { maximumFractionDigits: 0 });
+    return (ratePerSec / 1000).toLocaleString(undefined, { maximumFractionDigits: 0 });
 });
 
 function fetch() {
@@ -114,10 +114,10 @@ function fetch() {
 
 .progress-container {
     height: 25px;
-    display: flex;
     align-items: center;
     gap: 15px;
-    flex-grow: 0;
+    display: grid;
+    grid-template-columns: 8% 30% 20% 15% auto;
 }
 
 .progress-bar {
