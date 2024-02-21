@@ -12,6 +12,7 @@ const downloadTotal = ref(0);
 const lastProgress = ref<number>(0);
 const progress = ref(0);
 const status = ref("");
+const currentUrl = ref("")
 
 const total = computed(() => {
     if (downloadTotal.value > 0) {
@@ -56,7 +57,7 @@ function fetch() {
         }
 
         for (const url of urls) {
-            console.log(url);
+            currentUrl.value = url
 
             const contentLength = listen<number>("content_length", payload => {
                 downloadTotal.value = payload.payload;
@@ -96,6 +97,7 @@ function fetch() {
 <template>
     <button @click="fetch"> Get </button>
     <template v-if="downloadTotal > 0">
+        <div style="font-size: small;"> {{ currentUrl }}</div>
         <div class="progress-container">
             <div> {{ percentage.toFixed(1) }}% | </div>
             <div class="progress-bar">

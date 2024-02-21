@@ -166,18 +166,17 @@ function createdInHours() {
     /* background-image: linear-gradient(to right, rgb(50, 9, 9), rgb(58, 255, 147)); */
 }
 
-
 .buttons {
     justify-self: end;
 }
 
 .capsule {
-    --beta: rgb(255, 174, 92);
-    --stable: rgb(156, 234, 148);
+    --beta: rgb(255, 190, 125);
+    --stable: rgb(157, 226, 150);
     --alpha: rgb(234, 148, 148);
 
     border-style: solid;
-    border-color: rgb(108, 108, 108);
+    border-color: rgb(52, 52, 52);
     border-width: 1px;
     background-color: rgb(255, 255, 255);
     padding-left: 1rem;
@@ -194,5 +193,10 @@ function createdInHours() {
 
 .time {
     font-size: small;
+}
+
+button {
+    background-color: rgb(222, 255, 152);
+    color: #252525;
 }
 </style>
